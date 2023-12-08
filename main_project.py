@@ -54,3 +54,4 @@ if __name__ == "__main__":
         print("\nRandom Advice from advice.txt:", saved_advice[22:])
     else:
         print("Failed to get random advice from advice.txt")
+
