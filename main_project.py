@@ -1,8 +1,7 @@
 import requests
-from datetime import datetime
 import json
-
-now = datetime.now()
+import random
+from datetime import datetime
 
 def fetch_random_advice():
     try:
@@ -18,6 +17,18 @@ def save_advice_to_file(advice, filename="advice.txt"):
     with open(filename, "a") as file:
         file.write('[' + now.strftime('%Y-%m-%d %H:%M:%S') + '] ' + advice + ' ' + "\n")
 
+def get_random_advice_from_file(filename="advice.txt"):
+    try:
+        with open(filename, "r") as file:
+            advices = file.readlines()
+            if advices:
+                return random.choice(advices).strip()
+            else:
+                return None
+    except Exception as e:
+        print(f"파일 읽기 중 오류 발생: {e}")
+        return None
+
 def yes_or_no():
     print("Would you like to put this advice in advice.txt? ----- Press Y/N")
     value = input()
@@ -27,11 +38,19 @@ def yes_or_no():
     else :
       return 0
 
-random_advice = fetch_random_advice()
+if __name__ == "__main__":
+    # 실행할 때마다 랜덤 명언 출력
+    random_advice = fetch_random_advice()
+    now = datetime.now()
+    if random_advice:
+        print("Random Advice from API:", random_advice, now.strftime('(%Y-%m-%d %H:%M:%S)\n'))
+        if yes_or_no():
+            save_advice_to_file(random_advice)
+    else:
+        print("Failed to get random advice from API")
 
-if random_advice:
-    print("랜덤 명언:", random_advice, now.strftime('(%Y-%m-%d %H:%M:%S)\n'))
-    if yes_or_no():
-        save_advice_to_file(random_advice)
-else:
-    print("랜덤 명언을 불러오는 데 실패했습니다.")
+    saved_advice = get_random_advice_from_file()
+    if saved_advice:
+        print("\nRandom Advice from advice.txt:", saved_advice[22:])
+    else:
+        print("Failed to get random advice from advice.txt")
