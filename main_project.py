@@ -13,6 +13,8 @@ def fetch_random_advice():
         print(f"API 호출 중 오류 발생: {e}")
         return None
 
+now = datetime.now()
+
 def save_advice_to_file(advice, filename="advice.txt"):
     with open(filename, "a") as file:
         file.write('[' + now.strftime('%Y-%m-%d %H:%M:%S') + '] ' + advice + ' ' + "\n")
@@ -41,7 +43,6 @@ def yes_or_no():
 if __name__ == "__main__":
     # 실행할 때마다 랜덤 명언 출력
     random_advice = fetch_random_advice()
-    now = datetime.now()
     if random_advice:
         print("Random Advice from API:", random_advice, now.strftime('(%Y-%m-%d %H:%M:%S)\n'))
         if yes_or_no():
