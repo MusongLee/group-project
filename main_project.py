@@ -17,37 +17,31 @@ now = datetime.now()
 
 def save_advice_to_file(advice, filename="advice.txt"):
     with open(filename, "a") as file:
-        file.write('[' + now.strftime('%Y-%m-%d %H:%M:%S') + '] ' + advice + ' ' + "\n")
+        with open(filename, "r") as read_file:
+            advices = read_file.readlines()
+            advice_number = len(advices) + 1
+        file.write(f'{advice_number}. ' + '[' + now.strftime('%Y-%m-%d %H:%M:%S') + '] ' + advice + '\n')
 
 def get_random_advice_from_file(filename="advice.txt"):
     try:
         with open(filename, "r") as file:
             advices = file.readlines()
             if advices:
-                return advices
+                return random.choice(advices).strip()
             else:
                 return None
     except Exception as e:
         print(f"파일 읽기 중 오류 발생: {e}")
         return None
 
-def number_and_save_advice(advice_list, filename="advice.txt"):
-    if advice_list:
-        numbered_advice_list = [f"{i + 1}. {advice.strip()[22:]}" for i, advice in enumerate(advice_list)]
-        with open(filename, "w") as file:
-            file.write("\n".join(numbered_advice_list))
-        print("\nNumbered Advice saved to advice.txt.")
-    else:
-        print("No advice to number and save.")
-
 def yes_or_no():
     print("Would you like to put this advice in advice.txt? ----- Press Y/N")
     value = input()
-    if value.lower() == 'y':
-        print("\nSave complete.")
-        return 1
+    if value == 'y' or value == 'Y':
+      print("\nSave complete.")
+      return 1
     else:
-        return 0
+      return 0
 
 if __name__ == "__main__":
     # 실행할 때마다 랜덤 명언 출력
@@ -59,12 +53,8 @@ if __name__ == "__main__":
     else:
         print("Failed to get random advice from API")
 
-    saved_advices = get_random_advice_from_file()
-    if saved_advices:
-        print("\nRandom Advice from advice.txt:")
-        for i, advice in enumerate(saved_advices):
-            print(f"{i + 1}. {advice.strip()[22:]}")
-        
-        number_and_save_advice(saved_advices)
+    saved_advice = get_random_advice_from_file()
+    if saved_advice:
+        print("\nRandom Advice from advice.txt:", saved_advice[4:])
     else:
         print("Failed to get random advice from advice.txt")
