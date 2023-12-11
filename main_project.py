@@ -1,5 +1,6 @@
 import requests
 import json
+import random
 from datetime import datetime
 
 def fetch_random_advice():
@@ -32,8 +33,8 @@ def get_random_advice_from_file(filename="advice.txt"):
 
 def number_and_save_advice(advice_list, filename="advice.txt"):
     if advice_list:
+        numbered_advice_list = [f"{i + 1}. {advice.strip()[22:]}" for i, advice in enumerate(advice_list)]
         with open(filename, "w") as file:
-            numbered_advice_list = [f"{i + 1}. {advice.strip()[22:]}" for i, advice in enumerate(advice_list)]
             file.write("\n".join(numbered_advice_list))
         print("\nNumbered Advice saved to advice.txt.")
     else:
